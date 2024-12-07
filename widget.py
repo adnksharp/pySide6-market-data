@@ -1,6 +1,7 @@
 import sys
 import yfinance as yf
 from notifypy import Notify as noty
+import webbrowser as web
 
 from PySide6.QtWidgets import QApplication, QWidget
 
@@ -47,6 +48,13 @@ class Widget(QWidget):
         self.ui.search.clicked.connect(self.getTicker)
         self.ui.period.currentIndexChanged.connect(self.changePeriod)
         self.ui.interval.currentIndexChanged.connect(self.changeInterval)
+        self.ui.pushButton.clicked.connect(self.symbolHelp)
+        
+    def symbolHelp(self):
+        if self.ui.symbol.text().isalpha():
+            web.open('https://es.finance.yahoo.com/quote/' + self.ui.symbol.text().upper())
+        else:
+            web.open('https://es.finance.yahoo.com/lookup/')
         
     def clearHeaders(self, layout):
         if layout is not None:
