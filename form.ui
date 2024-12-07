@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>790</width>
+    <height>282</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,6 +49,16 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::DialogInformation"/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="name">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -80,6 +90,133 @@
        </property>
        <property name="flat">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Periodo:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="period">
+       <property name="currentIndex">
+        <number>7</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>1 día</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5 días</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>1 mes</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3 meses</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>6 meses</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>1 año</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2 años</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>En lo que va del año</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Máximo</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string> Intervalo:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="interval">
+       <property name="currentText">
+        <string>1wk</string>
+       </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>1d</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5d</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>1wk</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>1mo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3mo</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
        </property>
       </widget>
      </item>
