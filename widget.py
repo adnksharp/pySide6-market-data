@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+import matplotlib.dates as mdates
 from PySide6.QtGui import QPalette
 
 from ui_form import Ui_Widget
@@ -18,31 +19,27 @@ colors = {
         }
 
 class Canvas(FigureCanvas):
-    def __init__(self):
+    def __init__(self, *args):
         fig = Figure(facecolor=QPalette().color(QPalette.Window).name())
         fig.set_tight_layout(True)
 
-        self.axes = fig.add_subplot(facecolor=QPalette().color(QPalette.Window).name())
-        self.axes.tick_params(labelcolor=colors['on'], color=colors['high'])
+        self.axes = fig.add_subplot(111, facecolor=QPalette().color(QPalette.Window).name())
+        self.axes.tick_params(labelcolor=colors['off'], color=colors['on'])
 
         for spine in self.axes.spines.values():
-            spine.set_edgecolor(colors['on'])
-
-        self.axes.set_xlabel('Tiempo (s)', color=QPalette().color(QPalette.WindowText).name())
-        self.axes.set_ylabel('PPM', color=QPalette().color(QPalette.WindowText).name())
+            spine.set_edgecolor(colors['high'])
 
         super(Canvas, self).__init__(fig)
 
-    def update(self, data):
+    def update(self, xp, data):
         self.axes.clear()
-        self.axes.plot(data, color=colors['high'])
+        self.axes.plot(xp, data, color=QPalette().color(QPalette.Text).name(), linewidth=2)
+        self.axes.set_xlim([xp[0], xp[len(xp) - 1]])
 
 class Widget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.info = {}
-        self.now = {}
-        self.period = 'ytdx'
+        self.period = 'ytd'
         self.interval = '1wk'
         
         self.ui = Ui_Widget()
@@ -51,6 +48,16 @@ class Widget(QWidget):
         self.ui.period.currentIndexChanged.connect(self.changePeriod)
         self.ui.interval.currentIndexChanged.connect(self.changeInterval)
         
+    def clearHeaders(self, layout):
+        if layout is not None:
+            for i in reversed(range(layout.count())):
+                item = layout.itemAt(i)
+                if item.widget():
+                    widget = item.widget()
+                    widget.deleteLater()
+                elif item.layout():
+                    self.clearHeaders(item.layout())
+                    
     def changePeriod(self):
         match self.ui.period.currentIndex():
             case 0:
@@ -79,18 +86,32 @@ class Widget(QWidget):
         if symbol.isalpha():
             data = yf.Ticker(symbol)
             if data.info['trailingPegRatio']:
-                self.info = data.info
-                self.ui.name.setText(self.info['longName'])
-                self.info.pop('longBusinessSummary')
-                self.info.pop('companyOfficers')
-                self.now = data.analyst_price_targets
-                self.h = data.history(period=self.period, interval=self.interval)
-            else:
-                self.now = {}
-                self.info = {}
+                info = data.info
+                self.ui.name.setText(info['longName'])
+                info.pop('longBusinessSummary')
+                info.pop('companyOfficers')
                 
+                now = data.analyst_price_targets
+                history = data.history(period=self.period, interval=self.interval)
+                
+                label = [i for i in history.index]
+                history = [ i for i in history['Close']]
+                
+                self.graph = Canvas()
+                self.clearHeaders(self.ui.verticalLayout)
+                self.graph.update(label, history)
+                self.ui.verticalLayout.addWidget(self.graph)
+                
+                self.ui.label_4.setText(f'Actual: {now["current"]}   Máx: {now["high"]}   Mín: {now["low"]}   Media: {now["mean"]}   Mediana: {now["median"]}')
+                
+            else:
                 self.ui.symbol.setText('')
+                self.ui.label_4.setText('')
                 self.ui.name.setText('Empresa no encontrada')
+                self.graph = Canvas()
+                self.clearHeaders(self.ui.verticalLayout)
+                self.graph.update([0, 1], [0, 0])
+                self.ui.verticalLayout.addWidget(self.graph)
 
 
 if __name__ == "__main__":
