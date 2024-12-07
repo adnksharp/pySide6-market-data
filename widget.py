@@ -1,6 +1,5 @@
 import sys
 import yfinance as yf
-from notifypy import Notify as noty
 import webbrowser as web
 
 from PySide6.QtWidgets import QApplication, QWidget
